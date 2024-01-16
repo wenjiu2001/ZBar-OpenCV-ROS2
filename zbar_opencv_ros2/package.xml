@@ -2,21 +2,23 @@
 <package format="2">
   <name>zbar_opencv_ros2</name>
   <version>1.0.0</version>
-  <description>The zbar_opencv_ros2 package</description>
+  <description>The zbar_opencv_ros2 package integrates the ZBar barcode scanning library with OpenCV in a ROS 2 environment.</description>
   <maintainer email="tp6u4jo6@gmail.com">Wenjiu</maintainer>
   <license>CC BY-NC-SA 4.0</license>
 
+  <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>ament_cmake_auto</buildtool_depend>
-  <build_depend>cv_bridge</build_depend>
-  <build_depend>image_transport</build_depend>
-  <build_depend>roscpp</build_depend>
-  <build_depend>sensor_msgs</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <exec_depend>cv_bridge</exec_depend>
-  <exec_depend>image_transport</exec_depend>
-  <exec_depend>roscpp</exec_depend>
-  <exec_depend>sensor_msgs</exec_depend>
-  <exec_depend>std_msgs</exec_depend>
+
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>cv_bridge</depend>
+  <depend>image_transport</depend>
+  <depend>OpenCV</depend>
+  <depend>zbar</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
   
   <export>
     <build_type>ament_cmake</build_type>

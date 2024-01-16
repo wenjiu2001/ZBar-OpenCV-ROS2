@@ -6,11 +6,12 @@ if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
 endif()
 
+# Compiler-specific options
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
-# find dependencies
+# Find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
@@ -18,42 +19,48 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(ZBAR REQUIRED IMPORTED_TARGET zbar)
 
-find_package(PkgConfig)
-pkg_check_modules(PC_ZBAR QUIET zbar)
-set(ZBAR_DEFINITIONS ${PC_ZBAR_CFLAGS_OTHER})
-find_library(ZBAR_LIBRARIES NAMES zbar HINTS ${PC_ZBAR_LIBDIR} ${PC_ZBAR_LIBRARY_DIRS})
-find_path(ZBAR_INCLUDE_DIR Decoder.h HINTS ${PC_ZBAR_INCLUDEDIR} ${PC_ZBAR_INCLUDE_DIRS} PATH_SUFFIXES zbar)
-
-include_directories(
-  include
-  ${OpenCV_INCLUDE_DIRS}
-  ${ZBAR_INCLUDE_DIR}
-)
-
+# Executable
 add_executable(zbar_opencv_ros2 src/zbar_opencv_ros2.cpp)
 
+# Include directories
+# Include only if there are headers in the 'include' directory
+include_directories(include)
+
+# Ament target dependencies
 ament_target_dependencies(zbar_opencv_ros2
   rclcpp
+  std_msgs
   sensor_msgs
   cv_bridge
+  image_transport
 )
 
+# Link libraries
 target_link_libraries(zbar_opencv_ros2
   ${OpenCV_LIBRARIES}
-  ${ZBAR_LIBRARIES}
+  PkgConfig::ZBAR
 )
 
+# Installation
 install(TARGETS
   zbar_opencv_ros2
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# Install launch files.
 install(DIRECTORY
   launch
   DESTINATION share/${PROJECT_NAME}/
 )
+
+# Test
+option(BUILD_TESTS "Build test targets" ON)
+if(BUILD_TESTS AND BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+endif()
 
 # Export dependencies
 ament_package()
