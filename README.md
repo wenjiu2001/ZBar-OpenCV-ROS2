@@ -52,5 +52,5 @@ Adjustments can be made by modifying the following parameters:
    
 ## References
 
-- zbar_ros (https://wiki.ros.org/zbar_ros)
-- usb_cam (https://wiki.ros.org/usb_cam)
+- [zbar_ros](https://wiki.ros.org/zbar_ros)
+- [usb_cam](https://wiki.ros.org/usb_cam)
